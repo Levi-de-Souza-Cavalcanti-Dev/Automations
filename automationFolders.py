@@ -1,6 +1,8 @@
 import os
 import tkinter as tk
 from tkinter import filedialog, messagebox
+import pyautogui
+import time
 
 def listar_subpastas(diretorio):
     try:
@@ -38,9 +40,27 @@ def abrir_subpasta(diretorio, indice):
         if 1 <= indice <= len(subpastas):
             subpasta_selecionada = subpastas[indice - 1]
             caminho_subpasta = os.path.join(diretorio, subpasta_selecionada)
+            
+            # Abre a subpasta no explorador de arquivos
             os.startfile(caminho_subpasta)
+            
+            # Espera a subpasta abrir
+            time.sleep(2)
+            
+            # Move o cursor para a subpasta e clica com o botão direito
+            first_link_position = (848, 300)  # Substitua (x, y) pelas coordenadas
+
+            pyautogui.moveTo(first_link_position[0], first_link_position[1], duration=0.1)
+            pyautogui.rightClick()
+            
+            time.sleep(2)
+            pos_propriedades = (936, 616)
+            pyautogui.moveTo(pos_propriedades[0], pos_propriedades[1], duration=0.5)
+            pyautogui.click()
         else:
             messagebox.showerror("Erro", f"Índice fora do intervalo. Selecione um número entre 1 e {len(subpastas)}.")
+    except ValueError:
+        messagebox.showerror("Erro", "Por favor, insira um número válido.")
     except Exception as e:
         messagebox.showerror("Erro", f"Ocorreu um erro: {e}")
 
