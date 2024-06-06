@@ -4,6 +4,13 @@ from tkinter import filedialog, messagebox
 import pyautogui
 import time
 
+def abrir_nova_janela():
+    # Importa a função da nova janela
+    from cleanFolders import excluir_arquivos_txt
+    excluir_arquivos_txt()
+    # Destroi a janela atual
+    root.destroy()
+
 def listar_subpastas(diretorio):
     try:
         # Lista todos os arquivos e diretórios no caminho especificado
@@ -45,7 +52,7 @@ def abrir_subpasta(diretorio, indice):
             os.startfile(caminho_subpasta)
             
             # Espera a subpasta abrir
-            time.sleep(2)
+            time.sleep(1)
             
             # Move o cursor para a subpasta e clica com o botão direito
             first_link_position = (848, 300)  # Substitua (x, y) pelas coordenadas
@@ -53,10 +60,24 @@ def abrir_subpasta(diretorio, indice):
             pyautogui.moveTo(first_link_position[0], first_link_position[1], duration=0.1)
             pyautogui.rightClick()
             
-            time.sleep(2)
+            time.sleep(1)
             pos_propriedades = (936, 616)
-            pyautogui.moveTo(pos_propriedades[0], pos_propriedades[1], duration=0.5)
+            pyautogui.moveTo(pos_propriedades[0], pos_propriedades[1], duration=0.1)
             pyautogui.click()
+            
+            alter_name = (329, 325)
+            pyautogui.moveTo(alter_name[0], alter_name[1], duration=0.1)
+            pyautogui.click()
+            # Aguarda um curto período de tempo para garantir que a caixa de texto esteja pronta para receber entrada
+            time.sleep(0.5)
+
+            # Escreve "teste" na caixa de texto
+            pyautogui.typewrite("teste")
+            time.sleep(2)
+            # Seleciona todo o texto na caixa de texto e apaga
+            pyautogui.hotkey('ctrl', 'a')
+            pyautogui.press('backspace')
+
         else:
             messagebox.showerror("Erro", f"Índice fora do intervalo. Selecione um número entre 1 e {len(subpastas)}.")
     except ValueError:
@@ -83,7 +104,7 @@ botao_selecionar = tk.Button(root, text="Selecionar Diretório", command=selecio
 botao_selecionar.pack(pady=10)
 
 # Cria uma Listbox para exibir as subpastas
-listbox = tk.Listbox(root, width=50, height=20)
+listbox = tk.Listbox(root, width=50, height=10)
 listbox.pack(padx=10, pady=10)
 
 # Cria um campo de entrada para receber o índice da subpasta a ser aberta
@@ -93,6 +114,10 @@ entry_indice.pack(pady=10)
 # Cria um botão para abrir a subpasta com base no índice fornecido
 botao_abrir_pasta = tk.Button(root, text="Abrir Subpasta", command=abrir_pasta_selecionada)
 botao_abrir_pasta.pack(pady=10)
+
+# Cria um botão para abrir a nova janela
+botao_nova_janela = tk.Button(root, text="Abrir Nova Janela", command=abrir_nova_janela)
+botao_nova_janela.pack(pady=10)
 
 # Inicia o loop principal do Tkinter
 root.mainloop()
